@@ -1,0 +1,33 @@
+# Filetype for storing folder structures for progen
+
+Kiterjesztés: .str
+Struktúra:
+Könnyen átalakítható legyen
+name1/name2/name3
+name1/name4
+name1/name2/name5/name6
+stb.formátumra, hogy a program földolgozza
+legyen átlátható kézzel szerkesztéshez
+
+name - mappanév
+# - szeparátor
+333 - chmod jogosultságok
+name1#333
+|--name2#456
+|--|--name3#765
+|--|--name5
+|-----|--name6
+|--name4
+name7
+
+
+stringified:
+
+[name1[name2[name3],name5[name6],name4]name7]
+
+ha nem - és nem | :
+  berak: [
+  berak: beolvasott (név#szám)
+  sor végén berak: ]
+
+  VEREMMEL:
