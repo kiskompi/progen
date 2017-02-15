@@ -13,11 +13,12 @@ DirBuilder::DirBuilder(std::string path): path_f(path){
   structure = new FTree(read_file(path_f));
 }
 DirBuilder::~DirBuilder(){
-  //TODO DirBuilder destructor
-  delete structure;
+  //TODO DirBuilder destructor, valamiért double delete
+  //delete structure;
 }
 
 void DirBuilder::create_dirs(std::string path){
+  /// létrehoz egy stringet path (dir1/dir2) formában a structure->currentből (vagy minden Foldernek kell egy path), és ebbe a path-ba létrehoz egy directory-t
   structure->print();
 }
 

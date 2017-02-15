@@ -1,16 +1,18 @@
-#include "FTree.hpp"
 #include <fstream>
 #include <sstream>
 #include <tuple>
 #include <iostream>
 #include <cstring>
 
+#include "FTree.hpp"
+#include "../Heap/Heap.hpp"
+
 FTree::FTree()
 {
     //TODO FTree default constructor
-    std::cout<<"FTree::FTree\n";
     root.depth = 0;
     strncpy(root.perm, "aaa\0", sizeof(root.perm));
+    current = &root;
 }
 FTree::FTree(std::vector<std::string> file)
 {
@@ -19,6 +21,7 @@ FTree::FTree(std::vector<std::string> file)
     stringified = str_to_string(file);
     root.depth = 0; 
     strncpy(root.perm, "aaa\0", sizeof(root.perm));
+    current = &root;
 }
 
 FTree::~FTree()
@@ -48,15 +51,17 @@ void FTree::explore(void (*func)(), FTree::Folder folder)
 
     (*func)();
     if (folder.childs.empty()) return;
+    current = &folder;
+    print_node(current);
     for(int i = 0; i<root.childs.size();++i){
-        Folder &tmp = (root.childs[i]);
+        Folder &tmp = (current->childs[i]);
         this->explore(FTree::print_node, tmp);
     }
 }
 
-void FTree::add_child(Folder *folder)
+void FTree::add_child(Folder folder)
 {
-    folder->childs.push_back(Folder());
+    folder.childs.push_back(Folder());
 }
 
 
@@ -67,7 +72,6 @@ std::string FTree::str_to_string(std::vector<std::string> content)
 
     std::string stringified;
     std::string line;
-    std::vector<Folder* > folders;
     int prev_depth = -1;
     size_t checker = 0;
     // végigmegy a sorokon, minden sorban létrehozza a szükséges változókat és kibányássza a név#perm-et és a levelt. Berakja a talált tuple-t a vectorba.
@@ -103,12 +107,14 @@ std::string FTree::str_to_string(std::vector<std::string> content)
             perm = "---";
         }
 
-        Folder* folder_tmp = new Folder;
-        folder_tmp->depth = depth; 
-        strncpy(folder_tmp->perm, perm.c_str(), sizeof(folder_tmp->perm));
-        folder_tmp->perm[sizeof(folder_tmp->perm) - 1] = 0;
+        Folder folder_tmp;
+        folder_tmp.depth = depth; 
+        //FIXME a path-t kell berakni a name helyett!!
+        folder_tmp.name=name;
+        strncpy(folder_tmp.perm, perm.c_str(), sizeof(folder_tmp.perm));
+        folder_tmp.perm[sizeof(folder_tmp.perm) - 1] = 0;
 
-        folders.push_back(folder_tmp);
+        add_child(folder_tmp);
 /*
         int kul = prev_depth - depth;
         if (kul > 0)
@@ -146,5 +152,7 @@ void FTree::print()
 void FTree::print_node(){std::cout<<"node\n";}
 
 void FTree::print_node(Folder* f){
-    for (int i =0; i<f->childs.size();++i) std::cout<<"f->depth\n";
+    //FIXME a path-t kell berakni a name helyett!!
+    std::cout<<"Node name: "<<f->name<<std::endl;
+    for (int i =0; i<f->childs.size();++i) std::cout<<" f->depth\n";
 }

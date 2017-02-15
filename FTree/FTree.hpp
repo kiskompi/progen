@@ -11,17 +11,17 @@ class FTree {
     struct Folder {
       /// Nodes of the tree representing folder structures.
       size_t depth;
-      std::string name;
-      //std::string path;               /// the path of the folder in foo/bar/baz style, relative to the tree root
+      std::string path;               /// the path of the folder in foo/bar/baz style, relative to the tree root
       std::vector<Folder> childs;
       char perm[4] = "aaa";                   /// chmod permissions for the folder. if no file read, all folders have the same. files can specify it folder by folder
     };
 
     Folder root;
+    Folder* current;
     std::string stringified;
 
     // creates a new Folder* and puts it into the given Folder*'s childs vector
-    void add_child(Folder*);
+    void add_child(Folder);
     // prints the node in .str style but without the permissions. --with-perms may be implementad later
     static void print_node(Folder*);
     static void print_node();
