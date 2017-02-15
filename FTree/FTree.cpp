@@ -8,16 +8,17 @@
 FTree::FTree()
 {
     //TODO FTree default constructor
-    root->depth = 0; 
-    strncpy(root->perm, "aaa", sizeof(root->perm));
+    std::cout<<"FTree::FTree\n";
+    root.depth = 0;
+    strncpy(root.perm, "aaa\0", sizeof(root.perm));
 }
 FTree::FTree(std::vector<std::string> file)
 {
     //TODO FTree string constructor.
     // the algorithm to build the structure with add children
     stringified = str_to_string(file);
-    root->depth = 0; 
-    strncpy(root->perm, "aaa", sizeof(root->perm));
+    root.depth = 0; 
+    strncpy(root.perm, "aaa\0", sizeof(root.perm));
 }
 
 FTree::~FTree()
@@ -31,27 +32,31 @@ void FTree::explore(void (*func)())
     /// Explores the tree and calls the function for every node
     // TODO recursive explore algorithm and function call
     func();
-    if (!this->root->childs.empty()){
-        for(auto const& subfolder: this->root->childs){
-            explore(func, subfolder);
-        }   
-    } else return;
+    
+    if (this->root.childs.empty()) return;
+    for(int i = 0; i<root.childs.size();++i){
+        //FIXME generic function should be passed
+        Folder &tmp = (root.childs[i]);
+        this->explore(FTree::print_node, tmp);
+    }
 }
 
-void FTree::explore(void (*func)(), Folder* folder)
+void FTree::explore(void (*func)(), FTree::Folder folder)
 {
     /// Explores the tree and calls the function for every node
     // TODO recursive explore algorithm and function call
-    func();
-    if (folder->childs.empty()) return;
-    for(auto const& subfolder: folder->childs){
-        explore(func, subfolder);
+
+    (*func)();
+    if (folder.childs.empty()) return;
+    for(int i = 0; i<root.childs.size();++i){
+        Folder &tmp = (root.childs[i]);
+        this->explore(FTree::print_node, tmp);
     }
 }
 
 void FTree::add_child(Folder *folder)
 {
-    folder->childs.push_back(new Folder());
+    folder->childs.push_back(Folder());
 }
 
 
@@ -62,7 +67,6 @@ std::string FTree::str_to_string(std::vector<std::string> content)
 
     std::string stringified;
     std::string line;
-    std::tuple<std::string, int> tuple;
     std::vector<Folder* > folders;
     int prev_depth = -1;
     size_t checker = 0;
@@ -101,7 +105,6 @@ std::string FTree::str_to_string(std::vector<std::string> content)
 
         Folder* folder_tmp = new Folder;
         folder_tmp->depth = depth; 
-        folder_tmp->childs = std::vector<Folder*>();
         strncpy(folder_tmp->perm, perm.c_str(), sizeof(folder_tmp->perm));
         folder_tmp->perm[sizeof(folder_tmp->perm) - 1] = 0;
 
@@ -140,6 +143,8 @@ void FTree::print()
     explore(print_node);
 }
 
-void FTree::print_node(){
-    std::cout<<"NODE";
+void FTree::print_node(){std::cout<<"node\n";}
+
+void FTree::print_node(Folder* f){
+    for (int i =0; i<f->childs.size();++i) std::cout<<"f->depth\n";
 }

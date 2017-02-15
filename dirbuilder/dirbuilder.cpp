@@ -2,16 +2,26 @@
 #include <fstream>
 #include <iostream>
 
+extern const std::string DEFAULT_STRUCTURE;
+
+DirBuilder::DirBuilder(){
+  structure = new FTree();
+}
+
 DirBuilder::DirBuilder(std::string path): path_f(path){
   //TODO DirBuilder string constructor
+  structure = new FTree(read_file(path_f));
 }
 DirBuilder::~DirBuilder(){
   //TODO DirBuilder destructor
+  delete structure;
 }
 
-void DirBuilder::create_dirs(std::string path){}
+void DirBuilder::create_dirs(std::string path){
+  structure->print();
+}
 
-void DirBuilder::read_file(std::string fname){
+std::vector<std::string> DirBuilder::read_file(std::string fname){
   std::ifstream myfile (fname);
   if (myfile.is_open()){
     std::string line;
@@ -19,8 +29,7 @@ void DirBuilder::read_file(std::string fname){
     while ( getline (myfile,line) ) {
       content.push_back(line);
     }
-    std::cout<<content.size();
-    for (int i = 0; i<content.size(); ++i) std::cout<<i<<std::endl;
+    return content;
     //structure = new FTree(content);
     myfile.close();
   } else throw("Unable to open file");

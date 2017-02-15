@@ -13,17 +13,22 @@ class FTree {
       size_t depth;
       std::string name;
       //std::string path;               /// the path of the folder in foo/bar/baz style, relative to the tree root
-      std::vector<Folder*> childs={};
-      char perm[3];                   /// chmod permissions for the folder. if no file read, all folders have the same. files can specify it folder by folder
+      std::vector<Folder> childs;
+      char perm[4] = "aaa";                   /// chmod permissions for the folder. if no file read, all folders have the same. files can specify it folder by folder
     };
 
-    Folder* root;
+    Folder root;
     std::string stringified;
 
     // creates a new Folder* and puts it into the given Folder*'s childs vector
     void add_child(Folder*);
     // prints the node in .str style but without the permissions. --with-perms may be implementad later
-    static void print_node(/*Folder* */);
+    static void print_node(Folder*);
+    static void print_node();
+
+    // have to get a function to call at every node! this can be a mkdir function if needed
+    void explore(void (*func)());
+    void explore(void (*func)(), Folder);
 
 public:
     FTree();
@@ -33,9 +38,6 @@ public:
 
     ~FTree();
 
-    // have to get a function to call at every node! this can be a mkdir function if needed
-    void explore(void (*func)());
-    void explore(void (*func)(), Folder*);
     // Prints the structure to the output by callind the explore function with a print_node() function as parameter
     void print();
     // translates the incoming .str file to an inline [a[b]] style. gets the file content as std::string

@@ -8,10 +8,11 @@ class DirBuilder {
     // This class is responsible for building the directory structure and 
     // reading the structure files
 private:
-  std::string path_f = "";
+  std::string path_f;
   FTree* structure;
 
 public:
+  DirBuilder();
   DirBuilder(std::string structure_str);
   ~DirBuilder();
 
@@ -19,7 +20,7 @@ public:
   void create_dirs(std::string path);
   // Reads a file to the 'structure' variable by calling the function of FTree 
   // responsible for this task
-  void read_file(std::string fname);
+  std::vector<std::string> read_file(std::string fname);
   // Reads a the directory structure under path and writes it to a file
   void read_structure();
   // only calls structure.print()
