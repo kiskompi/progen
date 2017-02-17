@@ -31,11 +31,12 @@ int main(int argc, char** argv) {
         std::string fname = vm["file"].as<std::string>();
         db = DirBuilder(fname);
     } else {
-        db = DirBuilder();
+        std::cout << "File was not set.\n";
+        //db = DirBuilder();
     }
     if (vm.count("path")) {
         std::cout << "Path to project is:" << vm["path"].as<std::string>() << "\n";
-        db.create_dirs(path);
+        db.create_dirs_with_path(path);
     } else {
         std::cout << "Path was not set.\n";
     }

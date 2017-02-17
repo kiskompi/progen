@@ -7,6 +7,9 @@
 
 #include "FTree.hpp"
 
+//================================= FTree::Folder methods ==========================================//
+
+
 FTree::Folder::Folder(){
     depth = 0;
     path = ".";               /// the path of the folder in foo/bar/baz style, relative to the tree root
@@ -25,6 +28,8 @@ FTree::Folder::~Folder(){
 
 }
 
+//================================= FTree static methods ===================================//
+
 std::string stack_to_string(std::stack<std::string> string_stack){
 
     std::string str;
@@ -35,6 +40,9 @@ std::string stack_to_string(std::stack<std::string> string_stack){
     return str;
 }
 
+
+//================================= FTree methods ==========================================//
+
 FTree::FTree()
 {
     //TODO FTree default constructor
@@ -44,15 +52,16 @@ FTree::FTree()
 }
 
 
+
 FTree::~FTree()
 {
     //TODO FTree destructor
 }
 
-void FTree::create_dirs(std::string path){
+void FTree::create_dirs(){
     std::cout<<"Path to directory:"<<current->path;
-    if (path!="."){
-        std::cout<<path<<" : "<<boost::filesystem::create_directory(boost::filesystem::path(path));
+    if (root.path!="."){
+        std::cout<<root.path<<" : "<<boost::filesystem::create_directory(boost::filesystem::path(root.path));
     }
     create_dirs(&root);
 }
@@ -63,7 +72,8 @@ void FTree::create_dirs(Folder* f){
     for(int i = 0; i<root.childs.size();++i){
         //FIXME generic function should be passed
         current = &(f->childs[i]);
-        std::cout<<current->path<<" : "<<boost::filesystem::create_directory(boost::filesystem::path(current->path))<<std::endl;
+        std::string full_path = root.path+"/"+current->path;
+        std::cout<<current->path<<" : "<<boost::filesystem::create_directory(boost::filesystem::path(full_path))<<std::endl;
         this->create_dirs(current);
     }
 }
@@ -206,4 +216,8 @@ void FTree::explore(void (*func)(), FTree::Folder folder)
         Folder &tmp = (current->childs[i]);
         this->explore(func, tmp);
     }
+}
+
+void FTree::set_path(std::string path_){
+    root.path = path_;
 }

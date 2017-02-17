@@ -45,10 +45,8 @@ class FTree {
 public:
     FTree();
     FTree(char perms[3]);
-    FTree(std::vector<std::string> file_content);
-    FTree(std::vector<std::string> file_content, char perms[3]);
 
-    void create_dirs(std::string);
+    void create_dirs();
     void create_dirs(Folder*);
 
     std::string get_current(){return current->path;}
@@ -59,6 +57,8 @@ public:
     void print();
     // translates the incoming .str file to an inline [a[b]] style. gets the file content as std::string
     std::string build_structure(std::vector<std::string> f);
+
+    void set_path(std::string);
 
 };
 

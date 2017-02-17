@@ -8,20 +8,20 @@ DirBuilder::DirBuilder(){
   structure = new FTree();
 }
 
-DirBuilder::DirBuilder(std::string path): path_f(path){
+DirBuilder::DirBuilder(std::string fname_): fname(fname_){
   //TODO DirBuilder string constructor
   structure = new FTree();
-  structure->build_structure(read_file(path_f));
+  structure->build_structure(read_file(fname));
 }
 DirBuilder::~DirBuilder(){
   //TODO DirBuilder destructor, valamiért double delete
   //delete structure;
 }
 
-void DirBuilder::create_dirs(std::string path){
+void DirBuilder::create_dirs(){
   /// létrehoz egy stringet path (dir1/dir2) formában a structure->currentből (vagy minden Foldernek kell egy path), és ebbe a path-ba létrehoz egy directory-t
   //std::function<bool(std::string)> creator = std::bind(&boost::filesystem::create_directory, structure->get_current());
-  structure->create_dirs(path);
+  structure->create_dirs();
 }
 
 std::vector<std::string> DirBuilder::read_file(std::string fname){
@@ -45,4 +45,14 @@ void DirBuilder::read_structure(){
 void DirBuilder::print_structure(){
   /// Prints the 'structure' to the terminal
     structure->print();
+}
+
+void DirBuilder::set_path(std::string path_){
+    this->path = path_;
+    structure->set_path(path);
+}
+
+void DirBuilder::create_dirs_with_path(std::string path_){
+    set_path(path_);
+    create_dirs();
 }
