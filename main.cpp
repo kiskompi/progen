@@ -1,10 +1,8 @@
 #include <iostream>
-#include <boost/filesystem.hpp>
 #include <boost/program_options.hpp>
 
 #include "dirbuilder/dirbuilder.hpp"
 
-namespace fs = boost::filesystem;
 namespace po = boost::program_options;
 
 const std::string DEFAULT_STRUCTURE = "[name1[name2[name3],name5[name6],name4]name7]";
@@ -32,7 +30,6 @@ int main(int argc, char** argv) {
     if (vm.count("file")) {
         std::string fname = vm["file"].as<std::string>();
         db = DirBuilder(fname);
-        db.print_structure();
     } else {
         db = DirBuilder();
     }

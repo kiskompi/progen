@@ -1,6 +1,7 @@
 #ifndef DIR_BUILDER
 #define DIR_BUILDER
 #include <string>
+#include <boost/filesystem.hpp>
 
 #include "../FTree/FTree.hpp"
 
@@ -20,7 +21,7 @@ public:
   void create_dirs(std::string path);
   // Reads a file to the 'structure' variable by calling the function of FTree 
   // responsible for this task
-  std::vector<std::string> read_file(std::string fname);
+  static std::vector<std::string> read_file(std::string fname);
   // Reads a the directory structure under path and writes it to a file
   void read_structure();
   // only calls structure.print()

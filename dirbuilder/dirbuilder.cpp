@@ -10,7 +10,8 @@ DirBuilder::DirBuilder(){
 
 DirBuilder::DirBuilder(std::string path): path_f(path){
   //TODO DirBuilder string constructor
-  structure = new FTree(read_file(path_f));
+  structure = new FTree();
+  structure->build_structure(read_file(path_f));
 }
 DirBuilder::~DirBuilder(){
   //TODO DirBuilder destructor, valamiért double delete
@@ -19,7 +20,8 @@ DirBuilder::~DirBuilder(){
 
 void DirBuilder::create_dirs(std::string path){
   /// létrehoz egy stringet path (dir1/dir2) formában a structure->currentből (vagy minden Foldernek kell egy path), és ebbe a path-ba létrehoz egy directory-t
-  structure->print();
+  //std::function<bool(std::string)> creator = std::bind(&boost::filesystem::create_directory, structure->get_current());
+  structure->create_dirs(path);
 }
 
 std::vector<std::string> DirBuilder::read_file(std::string fname){
@@ -41,5 +43,6 @@ void DirBuilder::read_structure(){
     //TODO reading dir sructure, str-ify it and write it to file
 }
 void DirBuilder::print_structure(){
+  /// Prints the 'structure' to the terminal
     structure->print();
 }
