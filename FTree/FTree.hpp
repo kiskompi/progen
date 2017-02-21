@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <array>
 
 class FTree {
 /// In-memory data structure for storing folder structures. Built for progen.
@@ -14,11 +15,13 @@ class FTree {
             size_t depth;
             std::string path;               /// the path of the folder in foo/bar/baz style, relative to the tree root
             std::vector<Folder> childs;
-            char perm[4] = "aaa";                   /// chmod permissions for the folder. if no file read, all folders have the same. files can specify it folder by folder
+            std::array<char,3> perm;
+;                   /// chmod permissions for the folder. if no file read, all folders have the same. files can specify it folder by folder
             Folder* parent;
 
             Folder();
             Folder(Folder*, std::string);
+            Folder(Folder*, std::string, int depth, std::string perm);
             ~Folder();
 
             void add_child();

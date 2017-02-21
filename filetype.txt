@@ -39,3 +39,32 @@ ha nem - és nem | :
 6521
 41
 7
+
+
+
+
+/*
+        int kul = prev_depth - depth;
+        if (kul > 0)
+        {
+            // if current is more near to root than previous
+            for (int k = 0; k < kul; ++k)
+                stringified.append("]");
+            stringified.append("," + name);
+        }
+        else if (kul == 0)
+        {
+            // if current is a sibling
+            stringified.append("," + name);
+        }
+        else if (kul == -1)
+        {
+            // if current is a child of the previous
+            stringified.append("[" + name);
+        }
+        else
+            throw("Invalid folder structure");
+
+        prev_depth = depth;*/
+
+v

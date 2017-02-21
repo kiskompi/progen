@@ -10,18 +10,24 @@
 //================================= FTree::Folder methods ==========================================//
 
 
-FTree::Folder::Folder(){
-    depth = 0;
-    path = ".";               /// the path of the folder in foo/bar/baz style, relative to the tree root
-    char perm[4] = "aaa";                   /// chmod permissions for the folder. if no file read, all folders have the same. files can specify it folder by folder
-    parent = nullptr;
+FTree::Folder::Folder()
+    :depth(0),path("."),parent(nullptr)
+{
+    std::string tmp = "aaa";
+    std::copy(tmp.begin(), tmp.end(), this->perm.data());                  /// chmod permissions for the folder. if no file read, all folders have the same. files can specify it folder by folder
 }
 
-FTree::Folder::Folder(Folder* parent_, std::string p){
-    depth = 0;
-    path = p;               /// the path of the folder in foo/bar/baz style, relative to the tree root
-    char perm[4] = "aaa";                   /// chmod permissions for the folder. if no file read, all folders have the same. files can specify it folder by folder
-    parent = parent_;
+FTree::Folder::Folder(Folder* parent_, std::string p)
+    :depth(0),path(p),parent(parent_)
+{
+    std::string tmp = "aaa";
+    std::copy(tmp.begin(), tmp.end(), this->perm.data());
+}
+
+FTree::Folder::Folder(Folder* parent_, std::string p, int depth, std::string perm_in)
+    :depth(depth),path(p),parent(parent_)
+{
+    std::copy(perm_in.begin(), perm_in.end(), this->perm.data());
 }
 
 FTree::Folder::~Folder(){
@@ -31,7 +37,6 @@ FTree::Folder::~Folder(){
 //================================= FTree static methods ===================================//
 
 std::string stack_to_string(std::stack<std::string> string_stack){
-
     std::string str;
     while(!string_stack.empty()){
         str.insert(0,string_stack.top());
@@ -46,8 +51,7 @@ std::string stack_to_string(std::stack<std::string> string_stack){
 FTree::FTree()
 {
     //TODO FTree default constructor
-    root.depth = 0;
-    strncpy(root.perm, "aaa\0", sizeof(root.perm));
+    root = Folder();
     current = &root;
 }
 
@@ -56,12 +60,12 @@ FTree::FTree()
 FTree::~FTree()
 {
     //TODO FTree destructor
+    delete current;
 }
 
 void FTree::create_dirs(){
-    std::cout<<"Path to directory:"<<current->path;
     if (root.path!="."){
-        std::cout<<root.path<<" : "<<boost::filesystem::create_directory(boost::filesystem::path(root.path));
+        std::cout<<root.path<<" : "<<boost::filesystem::create_directory(boost::filesystem::path(root.path))<<std::endl;
     }
     create_dirs(&root);
 }
@@ -103,7 +107,7 @@ std::string FTree::build_structure(std::vector<std::string> content)
         while ((name_start_in = line.find("|--", name_start_in)) != std::string::npos)
         {
             ++depth;
-            name_start_in = name_start_in + 2; // length of |--
+            name_start_in = name_start_in + 3; // length of |--
             name_start = name_start_in;
         }
         
@@ -135,12 +139,10 @@ std::string FTree::build_structure(std::vector<std::string> content)
             path_stack.push(name);
         }
 
-        Folder folder_tmp(current, stack_to_string(path_stack));
+        Folder folder_tmp(current, stack_to_string(path_stack), depth, perm);
         folder_tmp.depth = depth; 
         //FIXME a path-t kell berakni a name helyett!!
         std::cout<<folder_tmp.path<<" d: "<<depth<<std::endl;
-        strncpy(folder_tmp.perm, perm.c_str(), sizeof(folder_tmp.perm));
-        folder_tmp.perm[sizeof(folder_tmp.perm) - 1] = 0;
 
         add_child(folder_tmp);
         prev_depth = depth;
@@ -162,33 +164,6 @@ void FTree::print_node(Folder* f){
     std::cout<<"Node name: "<<f->path<<std::endl;
     for (int i =0; i<f->childs.size();++i) std::cout<<" f->depth\n";
 }
-
-
-
-/*
-        int kul = prev_depth - depth;
-        if (kul > 0)
-        {
-            // if current is more near to root than previous
-            for (int k = 0; k < kul; ++k)
-                stringified.append("]");
-            stringified.append("," + name);
-        }
-        else if (kul == 0)
-        {
-            // if current is a sibling
-            stringified.append("," + name);
-        }
-        else if (kul == -1)
-        {
-            // if current is a child of the previous
-            stringified.append("[" + name);
-        }
-        else
-            throw("Invalid folder structure");
-
-        prev_depth = depth;*/
-
 void FTree::explore(void (*func)())
 {
     /// Explores the tree and calls the function for every node
