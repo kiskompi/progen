@@ -24,7 +24,7 @@ int main(int argc, char** argv) {
     po::notify(vm);
     DirBuilder db;
     if (vm.count("help")) {
-        std::cout << desc << "\n";
+        std::cout << desc << std::endl;
         return 1;
     }
     if (vm.count("file")) {
@@ -35,13 +35,13 @@ int main(int argc, char** argv) {
         //db = DirBuilder();
     }
     if (vm.count("path")) {
-        std::cout << "Path to project is:" << vm["path"].as<std::string>() << "\n";
+        std::cout << "Path to project is: " << vm["path"].as<std::string>() << std::endl;
         db.create_dirs_with_path(path);
     } else {
         std::cout << "Path was not set.\n";
     }
     if (vm.count("cmake")) {
-        std::cout << "cMake is:" << vm["cmake"].as<bool>() << "\n";
+        std::cout << "cMake is:" << vm["cmake"].as<bool>() << std::endl;
     } else {
         std::cout << "cMake was not set.\n";
     }

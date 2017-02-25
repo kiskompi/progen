@@ -16,6 +16,20 @@
         <in>main.cpp</in>
       </df>
       <df name="test">
+        <df name="name1">
+          <df name="name2">
+            <df name="name3">
+            </df>
+            <df name="name5">
+              <df name="name6">
+              </df>
+            </df>
+          </df>
+          <df name="name4">
+          </df>
+        </df>
+        <df name="name7">
+        </df>
       </df>
       <in>main.cpp</in>
     </df>

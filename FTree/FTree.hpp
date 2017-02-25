@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <array>
+#include <functional>
 
 class FTree {
 /// In-memory data structure for storing folder structures. Built for progen.
@@ -29,7 +30,6 @@ class FTree {
 
     Folder root;
     Folder* current;
-    std::string stringified;
 
     // creates a new Folder* and puts it into the 'current' node's' childs vector
     void add_child(Folder add_this);
@@ -37,13 +37,13 @@ class FTree {
     void to_parent_folder();
 
     // prints the node in .str style but without the permissions. --with-perms may be implementad later
-    static void print_node(Folder*);
+    static void print_node(Folder&);
     // prints the 'current' node
     static void print_node();
 
     // have to get a function to call at every node! this can be a mkdir function if needed
-    void explore(void (*func)());
-    void explore(void (*func)(), Folder);
+    void explore(/*void (*func)()*/std::function<void(Folder&)>);
+    void explore(/*void (*func)(),*/std::function<void(Folder&)>, Folder);
 
 public:
     FTree();
@@ -59,7 +59,7 @@ public:
     // Prints the structure to the output by callind the explore function with a print_node() function as parameter
     void print();
     // translates the incoming .str file to an inline [a[b]] style. gets the file content as std::string
-    std::string build_structure(std::vector<std::string> f);
+    void build_structure(std::vector<std::string> f);
 
     void set_path(std::string);
 
