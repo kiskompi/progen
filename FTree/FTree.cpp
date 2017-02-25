@@ -1,4 +1,5 @@
 #include "FTree.hpp"
+#include "../Exceptions/InvalidStructureException.hpp"
 
 #if defined(_WIN64)
 	/* Microsoft Windows (64-bit). ------------------------------ */
@@ -13,7 +14,6 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-#include <stack>  
 #include <boost/filesystem.hpp>
 
 
@@ -46,7 +46,7 @@ FTree::Folder::~Folder(){
 
 //================================= FTree static methods ===================================//
 
-std::string stack_to_string(std::stack<std::string> string_stack){
+std::string FTree::stack_to_string(std::stack<std::string> string_stack){
     std::string str;
     while(!string_stack.empty()){
         str.insert(0,string_stack.top());
@@ -120,8 +120,12 @@ void FTree::build_structure(std::vector<std::string> content)
         }
         
         name_with_perm = line.substr(name_start, line.length()); // a végéig olvassa, permissionökkel együtt
-        if (name_with_perm.empty()){
-            std::cerr<<"No folder name!\n";
+        try{
+            if (name_with_perm.empty()){
+                throw InvalidStructureException();
+            }
+        } catch (InvalidStructureException ex) {
+            std::cerr<<ex.what()<<std::endl;
             exit;
         }
 
@@ -136,18 +140,24 @@ void FTree::build_structure(std::vector<std::string> content)
             perm = "---";
         }
         name.append(SEPTOR);
-        if(depth > prev_depth) 
+        try{
+        if(depth == prev_depth+1) 
             path_stack.push(name);
         else if (depth == prev_depth){
             path_stack.pop();
             path_stack.push(name);
+        } else if (depth > prev_depth + 1){
+            throw InvalidStructureException();
         } else {
             for (int i = 0; i<prev_depth-depth+1; ++i)
                 path_stack.pop();
             path_stack.push(name);
         }
-
-        Folder folder_tmp(current, stack_to_string(path_stack), depth, perm);
+        } catch ( InvalidStructureException ex){
+             std::cerr<<"Progen exited with "<<ex.what()<<std::endl;
+             exit;
+        }
+        Folder folder_tmp(current, FTree::stack_to_string(path_stack), depth, perm);
         folder_tmp.depth = depth; 
 
         add_child(folder_tmp);
@@ -158,38 +168,45 @@ void FTree::build_structure(std::vector<std::string> content)
 
 void FTree::print()
 {
-    std::cout<<"PRINT:\n";
-    using namespace std::placeholders;
-    std::function<void(Folder&)> f = std::bind(static_cast<void(FTree::*)(Folder&)>(&FTree::print_node, this, _1));
-
-    explore(f);
+    explore(print_node);
 }
 
-void FTree::print_node(Folder &f){
-    std::cout<<f.path<<std::endl;
+void FTree::print_node(){
+    //TODO
+    std::cout<<"node\n";
 }
 
-void FTree::explore(std::function<void(Folder&)> func)
+void FTree::print_node(Folder& f){
+    //TODO
+    for (int i =0; i<f.childs.size();++i) std::cout<<" f->depth\n";
+}
+
+void FTree::explore(void (*func)())
 {
     /// Explores the tree and calls the function for every node
     // TODO recursive explore algorithm and function call
-    current = &root;
-    func(root);
+
+    (*func)();
+    std::cout<<"Path to directory:"<<current->path;
     if (root.childs.empty()) return;
+    current = &root;
     for(int i = 0; i<root.childs.size();++i){
-        this->explore(func, (current->childs[i]));
+        Folder &tmp = (current->childs[i]);
+        this->explore(func, tmp);
     }
 }
 
-
-void FTree::explore(std::function<void(Folder&)> func, FTree::Folder folder)
+void FTree::explore(void (*func)(), FTree::Folder folder)
 {
     /// Explores the tree and calls the function for every node
     // TODO recursive explore algorithm and function call
-    func(folder);
+
+    (*func)();
     if (folder.childs.empty()) return;
-    for(int i = 0; i<folder.childs.size();++i){
-        this->explore(func, (folder.childs[i]));
+    current = &folder;
+    for(int i = 0; i<root.childs.size();++i){
+        Folder &tmp = (current->childs[i]);
+        this->explore(func, tmp);
     }
 }
 
