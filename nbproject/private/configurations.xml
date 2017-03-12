@@ -2,11 +2,103 @@
 <configurationDescriptor version="100">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <df root="." name="0">
+      <df name=".history">
+        <df name="dirbuilder">
+          <in>dirbuilder_20170228105321.cpp</in>
+          <in>dirbuilder_20170228105428.cpp</in>
+          <in>dirbuilder_20170228105451.cpp</in>
+          <in>dirbuilder_20170228105453.cpp</in>
+          <in>dirbuilder_20170228105514.cpp</in>
+          <in>dirbuilder_20170228105516.cpp</in>
+          <in>dirbuilder_20170228105532.cpp</in>
+          <in>dirbuilder_20170228105539.cpp</in>
+        </df>
+        <df name="FTree">
+          <in>FTree_20170228102737.cpp</in>
+          <in>FTree_20170228102739.cpp</in>
+          <in>FTree_20170228102817.cpp</in>
+          <in>FTree_20170228102858.cpp</in>
+          <in>FTree_20170228104834.cpp</in>
+          <in>FTree_20170228104923.cpp</in>
+          <in>FTree_20170228104949.cpp</in>
+          <in>FTree_20170228104956.cpp</in>
+          <in>FTree_20170228105036.cpp</in>
+          <in>FTree_20170228105112.cpp</in>
+          <in>FTree_20170228105144.cpp</in>
+          <in>FTree_20170228105200.cpp</in>
+          <in>FTree_20170228105227.cpp</in>
+          <in>FTree_20170228105231.cpp</in>
+          <in>FTree_20170228105650.cpp</in>
+          <in>FTree_20170228105758.cpp</in>
+          <in>FTree_20170228105800.cpp</in>
+          <in>FTree_20170228105814.cpp</in>
+          <in>FTree_20170228105817.cpp</in>
+          <in>FTree_20170228105819.cpp</in>
+          <in>FTree_20170228105906.cpp</in>
+          <in>FTree_20170228110017.cpp</in>
+          <in>FTree_20170228110029.cpp</in>
+          <in>FTree_20170228110102.cpp</in>
+          <in>FTree_20170228110155.cpp</in>
+          <in>FTree_20170228110208.cpp</in>
+          <in>FTree_20170228110800.cpp</in>
+          <in>FTree_20170228110807.cpp</in>
+          <in>FTree_20170228110816.cpp</in>
+          <in>FTree_20170228110821.cpp</in>
+          <in>FTree_20170228110850.cpp</in>
+          <in>FTree_20170228110902.cpp</in>
+          <in>FTree_20170306011412.cpp</in>
+          <in>FTree_20170306011423.cpp</in>
+          <in>FTree_20170306011553.cpp</in>
+          <in>FTree_20170306011707.cpp</in>
+          <in>FTree_20170306011827.cpp</in>
+          <in>FTree_20170306012050.cpp</in>
+          <in>FTree_20170306012214.cpp</in>
+          <in>FTree_20170306012350.cpp</in>
+          <in>FTree_20170306012729.cpp</in>
+          <in>FTree_2017030601758.cpp</in>
+          <in>FTree_2017030601808.cpp</in>
+          <in>FTree_2017030601846.cpp</in>
+          <in>FTree_2017030602146.cpp</in>
+          <in>FTree_2017030602811.cpp</in>
+          <in>FTree_2017030602923.cpp</in>
+          <in>FTree_2017030603005.cpp</in>
+          <in>FTree_2017030603326.cpp</in>
+          <in>FTree_2017030603419.cpp</in>
+          <in>FTree_2017030603434.cpp</in>
+          <in>FTree_2017030603449.hpp</in>
+          <in>FTree_2017030603457.hpp</in>
+          <in>FTree_2017030603503.cpp</in>
+          <in>FTree_2017030603603.cpp</in>
+          <in>FTree_2017030603630.cpp</in>
+          <in>FTree_2017030603725.cpp</in>
+          <in>FTree_2017030603731.cpp</in>
+          <in>FTree_2017030603753.cpp</in>
+          <in>FTree_2017030603857.cpp</in>
+          <in>FTree_2017030604102.cpp</in>
+          <in>FTree_2017030604201.cpp</in>
+          <in>FTree_2017030604242.cpp</in>
+          <in>FTree_2017030604339.cpp</in>
+          <in>FTree_2017030604605.cpp</in>
+          <in>FTree_2017030604609.cpp</in>
+          <in>FTree_2017030604633.cpp</in>
+          <in>FTree_2017030604640.cpp</in>
+          <in>FTree_2017030604740.cpp</in>
+          <in>FTree_2017030604837.cpp</in>
+          <in>FTree_2017030604858.cpp</in>
+          <in>FTree_2017030604947.cpp</in>
+        </df>
+        <in>main_20170228105338.cpp</in>
+        <in>main_20170228105353.cpp</in>
+        <in>main_20170228105556.cpp</in>
+      </df>
       <df name=".vscode">
       </df>
       <df name="dirbuilder">
         <in>dirbuilder.cpp</in>
         <in>dirbuilder.hpp</in>
+      </df>
+      <df name="Exceptions">
+        <in>InvalidStructureException.hpp</in>
       </df>
       <df name="FTree">
         <in>FTree.cpp</in>
@@ -16,20 +108,6 @@
         <in>main.cpp</in>
       </df>
       <df name="test">
-        <df name="name1">
-          <df name="name2">
-            <df name="name3">
-            </df>
-            <df name="name5">
-              <df name="name6">
-              </df>
-            </df>
-          </df>
-          <df name="name4">
-          </df>
-        </df>
-        <df name="name7">
-        </df>
       </df>
       <in>main.cpp</in>
     </df>

@@ -1,0 +1,46 @@
+#include <iostream>
+#include <boost/program_options.hpp>
+
+#include "dirbuilder/dirbuilder.hpp"
+
+namespace po = boost::program_options;
+
+int main(int argc, char** argv)
+{
+    std::string path;
+    std::string file_name;
+    bool cmake;
+    po::options_description desc("Allowed options");
+    desc.add_options()
+    ("help", "produce help message")
+    ("path,P", po::value<std::string>(&path), "Set project path")
+    ("cmake,C", po::value<bool>(&cmake) -> default_value(true), "Creates cMake.txt if true")
+    ("file,F", po::value<std::string>(&path), "Set file to read, must be in path directory! If not set, default structure will be built.")
+    ;
+
+    po::variables_map vm;
+    po::store(po::parse_command_line(argc, argv, desc), vm);
+    po::notify(vm);
+    DirBuilder db;
+
+    if (vm.count("help")) {
+        std::cout << desc << std::endl;
+        return 1;
+    }
+
+    if (vm.count("file"))
+        db = DirBuilder(vm["file"].as<std::string>());
+    else
+        std::cout << "File was not set.\n";
+
+    if (vm.count("path"))
+        db.create_dirs_with_path(path);
+    else
+        std::cout << "Path was not set.\n";
+
+    if (vm.count("cmake"))
+        std::cout << "cMake is:" << vm["cmake"].as<bool>() << std::endl;
+    else
+        std::cout << "cMake was not set.\n";
+    db.print_structure();
+}
