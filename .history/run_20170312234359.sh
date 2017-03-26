@@ -1,0 +1,1 @@
+./a.out --path test --file example.str

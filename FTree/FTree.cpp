@@ -28,22 +28,17 @@ FTree::Folder::Folder()
     std::copy(tmp.begin(), tmp.end(), this->perm.data()); 
 }
 
-FTree::Folder::Folder(Folder const &f)
-    :depth(f.depth),path(f.path),parent(f.parent), perm(f.perm)
-{
-}
-
-FTree::Folder::Folder(std::shared_ptr<Folder> parent_, std::string p)
+FTree::Folder::Folder(Folder* parent_, std::string p)
     :depth(0),path(p),parent(parent_)
 {
     std::string tmp = "aaa";
     std::copy(tmp.begin(), tmp.end(), this->perm.data());
 }
 
-FTree::Folder::Folder(std::shared_ptr<Folder> parent_, std::string path_, int depth_, std::string perm_)
-    :depth(depth_),path(path_),parent(parent_)
+FTree::Folder::Folder(Folder* parent_, std::string p, int depth, std::string perm_in)
+    :depth(depth),path(p),parent(parent_)
 {
-    std::copy(perm_.begin(), perm_.end(), this->perm.data());
+    std::copy(perm_in.begin(), perm_in.end(), this->perm.data());
 }
 
 FTree::Folder::~Folder()
@@ -67,14 +62,16 @@ std::string FTree::stack_to_string(std::stack<std::string> string_stack)
 //================================= FTree methods ==========================================//
 
 FTree::FTree()
-    :root(Folder()), current(std::make_shared<Folder>(root))
 {
+    root = Folder();
+    current = &root;
 }
+
 
 
 FTree::~FTree()
 {
-    // delete current;
+    delete current;
 }
 
 void FTree::create_dirs()
@@ -82,30 +79,25 @@ void FTree::create_dirs()
     if (root.path!=".") {
         boost::filesystem::create_directory(boost::filesystem::path(root.path));
     }
-    create_dirs(std::make_shared<Folder>(FTree::Folder(root)));
+    create_dirs(&root);
 }
 
-void FTree::create_dirs(std::shared_ptr<Folder> f)
+void FTree::create_dirs(Folder* f)
 {
-    current = f;
-    // FIXME childs is always empty!
-    if (current->childs.empty()) {std::cout<<"BABA\n";return;}
-    std::cout<<"child not empty "<<current->childs.size()<<"\n";
-    for(int i = 0; i<current->childs.size(); ++i) {
+
+    if (f->childs.empty()) return;
+    for(int i = 0; i<root.childs.size(); ++i) {
         // TODO generic function should be passed
-        current = std::make_shared<Folder>(current->childs.at(i));
+        current = &(f->childs[i]);
         std::string full_path = root.path+SEPTOR+current->path;
-        std::cout<<full_path<<"created\n";
         boost::filesystem::create_directory(boost::filesystem::path(full_path));
         this->create_dirs(current);
     }
-} 
+}
 
-void FTree::add_child(Folder const &add_this)
+void FTree::add_child(Folder add_this)
 {
-    // std::cout<<"ADDED: "<<add_this.path<<" to "<<current->path<<std::endl;
     current->childs.push_back(add_this);
-    for (Folder& i: current->childs) std::cout<<"Add_child - Current: "<<current->path<<" \t\t|--: "<<i.path<<std::endl;
 }
 
 void FTree::build_structure(std::vector<std::string> content)
@@ -151,43 +143,25 @@ void FTree::build_structure(std::vector<std::string> content)
         name.append(SEPTOR);
         try {
             if(depth == prev_depth+1)
-            {
-                // structure creation working, folder creaton doesnt
                 path_stack.push(name);
-                if (!current->childs.empty()) 
-                    current = std::make_shared<FTree::Folder>(current->childs.at(current->childs.size()-1));
-                Folder folder_tmp(current, FTree::stack_to_string(path_stack), depth, perm);
-                add_child(folder_tmp);
-            }
             else if (depth == prev_depth) {
                 path_stack.pop();
                 path_stack.push(name);
-                // current = current->parent;
-                Folder folder_tmp(current, FTree::stack_to_string(path_stack), depth, perm);
-                add_child(folder_tmp);
             } else if (depth > prev_depth + 1) {
                 throw InvalidStructureException();
             } else {
-                for (int i = 0; i < prev_depth - depth ; ++i)
-                {
-                    current = current->parent;
+                for (int i = 0; i<prev_depth-depth+1; ++i)
                     path_stack.pop();
-                }
-                path_stack.pop();
                 path_stack.push(name);
-                Folder folder_tmp(current, FTree::stack_to_string(path_stack), depth, perm);
-                add_child(folder_tmp);
             }
         } catch ( InvalidStructureException ex) {
             std::cerr<<"Progen exited with "<<ex.what()<<std::endl;
             exit;
         }
-        
-        //std::cout<<current->path;
-        //std::cout<<stack_to_string(path_stack);
+        Folder folder_tmp(current, FTree::stack_to_string(path_stack), depth, perm);
+        folder_tmp.depth = depth;
 
-        
-        
+        add_child(folder_tmp);
         prev_depth = depth;
     }
 }
@@ -206,12 +180,9 @@ void FTree::print_node()
 void FTree::explore(void (*func)())
 {
     (*func)();
-
-    for (int i = 0; i < current->childs.size(); ++i) std::cout<<current->childs[i].path<<std::endl;
-
     std::cout<<"Path to directory:"<<current->path;
     if (root.childs.empty()) return;
-    current = std::make_shared<Folder>(FTree::Folder(root));
+    current = &root;
     for(int i = 0; i<root.childs.size(); ++i) {
         Folder &tmp = (current->childs[i]);
         this->explore(func, tmp);
@@ -222,7 +193,7 @@ void FTree::explore(void (*func)(), FTree::Folder folder)
 {
     (*func)();
     if (folder.childs.empty()) return;
-    current = std::make_shared<Folder>(FTree::Folder(folder));
+    current = &folder;
     for(int i = 0; i<root.childs.size(); ++i) {
         Folder &tmp = (current->childs[i]);
         this->explore(func, tmp);

@@ -6,12 +6,12 @@ extern const std::string DEFAULT_STRUCTURE;
 
 DirBuilder::DirBuilder()
 {
-    structure = std::make_shared<FTree>(FTree());
+    structure = new FTree();
 }
 
 DirBuilder::DirBuilder(std::string fname_): fname(fname_)
 {
-    structure = std::make_shared<FTree>(FTree());
+    structure = new FTree();
     structure->build_structure(read_file(fname));
 }
 DirBuilder::~DirBuilder()

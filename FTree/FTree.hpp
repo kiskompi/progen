@@ -6,7 +6,6 @@
 #include <array>
 #include <functional>
 #include <stack>
-#include <memory>
 class FTree {
 /// In-memory data structure for storing folder structures. Built for progen.
 
@@ -17,23 +16,22 @@ class FTree {
         std::string path;               ///< the path of the folder in foo/bar/baz style, relative to the tree root
         std::vector<Folder> childs;     ///< if empty, the node is a leaf
         std::array<char,3> perm;        ///< chmod permissions for the folder. if no file read, all folders have the same. files can specify it folder by folder
-        std::shared_ptr<Folder> parent;
+        Folder* parent;
 
         Folder();
-        Folder(Folder const &);
-        Folder(std::shared_ptr<Folder>, std::string);
-        Folder(std::shared_ptr<Folder>, std::string, int depth, std::string perm);
+        Folder(Folder*, std::string);
+        Folder(Folder*, std::string, int depth, std::string perm);
         ~Folder();
     };
 
     Folder root;
-    std::shared_ptr<Folder> current;                    ///< pointer to the currently (or last) used node
+    Folder* current;                    ///< pointer to the currently (or last) used node
 
     /// creates a new Folder and puts it into the 'current' node's' 'childs' vector
-    void add_child(Folder const &add_this);
+    void add_child(Folder add_this);
 
     /// sets the 'current' pointer to its parent node
-    void to_parent_folder() const;
+    void to_parent_folder();
 
     /// prints current the node in .str style but without the permissions.
     // with-perms may be implementad later
@@ -50,7 +48,7 @@ class FTree {
 
     /// This function iterates through a subtree of the tree.
     ///  \param The starting node of the depth-first exploration. The function will explore its subtrees
-    void create_dirs(std::shared_ptr<Folder>);
+    void create_dirs(Folder*);
 
 public:
     FTree();

@@ -42,5 +42,4 @@ int main(int argc, char** argv)
         std::cout << "cMake is:" << vm["cmake"].as<bool>() << std::endl;
     else
         std::cout << "cMake was not set.\n";
-    
 }

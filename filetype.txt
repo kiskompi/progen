@@ -68,3 +68,42 @@ ha nem - és nem | :
         prev_depth = depth;*/
 
 v
+
+void FTree::create_dirs(Folder f)
+{
+    current = std::make_shared<Folder>(f);
+    // FIXME childs is always empty! perhaps because folder with test path is a strane phenomenon
+    std::cout<<"Create - Current: "<<current->path<<std::endl;
+    if (current->childs.empty()) return;
+    
+    std::cout<<"child not empty "<<current->childs.size()<<"\n";
+    for(int i = 0; i<current->childs.size(); ++i) {
+        // TODO generic function should be passed
+        current = std::make_shared<Folder>(current->childs.at(i));
+        std::string full_path = root.path+SEPTOR+current->path;
+        std::cout<<full_path<<"created\n";
+        boost::filesystem::create_directory(boost::filesystem::path(full_path));
+        this->create_dirs(current);
+    }
+} 
+
+void FTree::create_dirs(std::shared_ptr<Folder> f)
+{
+    // FIXME childs is always empty! perhaps because folder with test path is a strane phenomenon
+    std::cout<<"Create - Current: "<<current->path<<std::endl;
+    if (current->childs.empty()) return;
+
+    std::cout<<"child not empty "<<current->childs.size()<<"\n";
+    for(int i = 0; i<current->childs.size(); ++i) {
+        // TODO generic function should be passed
+        current = std::make_shared<Folder>(current->childs.at(i));
+        std::string full_path = root.path+SEPTOR+current->path;
+        std::cout<<full_path<<"created\n";
+        boost::filesystem::create_directory(boost::filesystem::path(full_path));
+        this->create_dirs(current);
+    }
+} 
+    /// This function iterates through a subtree of the tree.
+    ///  \param Folder folder The starting node of the depth-first exploration. The function will explore its subtrees
+    void create_dirs(std::shared_ptr<Folder> folder);
+    void create_dirs(Folder);

@@ -10,7 +10,7 @@ class DirBuilder {
     /// reading the structure files
 private:
     std::string fname;    /// Tha name of the .str file which contains the description of the folder structure
-    std::shared_ptr<FTree> structure;     /// An FTree structure which represents the folder structure to be created
+    FTree* structure;     /// An FTree structure which represents the folder structure to be created
     std::string path;     /// The name of the folder in which the folder structure will be created. Can be an absoulte path.
 
     void set_path(std::string);
