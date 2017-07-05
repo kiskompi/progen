@@ -1,5 +1,5 @@
 # Progen Project Structure Generator
-This app will be a simple project structure generator. It is under development and in alpha state. Right now it only works as a folder structure generator, but later more features will be added. Created only to practice the language by making something potentially useful.
+This app will be a simple project structure generator. It is under development and in alpha state. It is not designed to be efficient or elegant but rather a hobby project to try boost and practice various programming tasks. Right now it only works as a folder structure generator, but later more features will be added. Created only to practice the language by making something potentially useful.
 
 ## Features to implement
 [x] Folder structure generation
